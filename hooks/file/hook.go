@@ -61,6 +61,12 @@ func (hook *FileHook) Levels() []logrus.Level {
 }
 
 func getMessage(entry *logrus.Entry) (message string, err error) {
-	message = fmt.Sprintf("%s\n%s", entry.Message, entry.Data["err_full"])
+	message = message + fmt.Sprintf("%s\n", entry.Message)
+	for k, v := range entry.Data {
+		if !strings.HasPrefix(k, "err_") {
+			message = message + fmt.Sprintf("%s\n", v)
+		}
+	}
+	message = fmt.Sprintf("%s", entry.Data["err_full"])
 	return
 }
