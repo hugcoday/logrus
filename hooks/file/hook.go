@@ -67,6 +67,8 @@ func getMessage(entry *logrus.Entry) (message string, err error) {
 			message = message + fmt.Sprintf("%s\n", v)
 		}
 	}
-	message = fmt.Sprintf("%s", entry.Data["err_full"])
+	if full, ok := entry.Data["err_full"]; ok {
+		message = message + fmt.Sprintf("%v", full)
+	}
 	return
 }
