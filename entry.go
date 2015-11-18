@@ -136,12 +136,14 @@ func (entry *Entry) Print(args ...interface{}) {
 
 func (entry *Entry) Info(args ...interface{}) {
 	if entry.Logger.Level >= InfoLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(InfoLevel, fmt.Sprint(args...))
 	}
 }
 
 func (entry *Entry) Warn(args ...interface{}) {
 	if entry.Logger.Level >= WarnLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(WarnLevel, fmt.Sprint(args...))
 	}
 }
@@ -152,12 +154,14 @@ func (entry *Entry) Warning(args ...interface{}) {
 
 func (entry *Entry) Error(args ...interface{}) {
 	if entry.Logger.Level >= ErrorLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(ErrorLevel, fmt.Sprint(args...))
 	}
 }
 
 func (entry *Entry) Fatal(args ...interface{}) {
 	if entry.Logger.Level >= FatalLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(FatalLevel, fmt.Sprint(args...))
 	}
 	os.Exit(1)
@@ -165,6 +169,7 @@ func (entry *Entry) Fatal(args ...interface{}) {
 
 func (entry *Entry) Panic(args ...interface{}) {
 	if entry.Logger.Level >= PanicLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(PanicLevel, fmt.Sprint(args...))
 	}
 	panic(fmt.Sprint(args...))
