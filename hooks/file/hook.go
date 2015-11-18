@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/gogap/logrus"
-	"github.com/gogap/logrus/hooks/caller"
 )
 
 func NewHook(file string) (f *FileHook) {
@@ -62,22 +61,6 @@ func (hook *FileHook) Levels() []logrus.Level {
 }
 
 func getMessage(entry *logrus.Entry) (message string, err error) {
-	file, lineNumber := caller.GetCallerIgnoringLogMulti(2)
-	if file != "" {
-		sep := fmt.Sprintf("%s/src/", os.Getenv("GOPATH"))
-		fileName := strings.Split(file, sep)
-		if len(fileName) >= 2 {
-			file = fileName[1]
-		}
-	}
-	var fields string
-	for k, v := range entry.Data {
-		fields = fields + fmt.Sprintf("%s:%v;", k, v)
-	}
-	if len(fields) > 0 {
-		fields = fields[:len(fields)-1]
-	}
-	call := fmt.Sprintf("%s:%d[%s]", file, lineNumber, fields)
-	message = fmt.Sprintf("%s\n%s", entry.Message, call)
+	message = fmt.Sprintf("%s\n%s", entry.Message, entry.Data["err_full"])
 	return
 }

@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"time"
+
+	"github.com/gogap/errors"
 )
 
 // An entry is the final or intermediate Logrus logging entry. It contains all
@@ -104,8 +106,26 @@ func (entry *Entry) log(level Level, msg string) {
 	}
 }
 
+func (entry *Entry) hookErrorCode(args ...interface{}) *Entry {
+	for _, v := range args {
+		if err, ok := v.(errors.ErrCode); ok {
+			entry = entry.WithFields(Fields{
+				"err_id":    err.Id(),
+				"err_code":  err.Code(),
+				"err_ns":    err.Namespace(),
+				"err_msg":   err.Error(),
+				"err_stack": err.StackTrace(),
+				"err_ctx":   err.Context().String(),
+				"err_full":  err.FullError(),
+			})
+		}
+	}
+	return entry
+}
+
 func (entry *Entry) Debug(args ...interface{}) {
 	if entry.Logger.Level >= DebugLevel {
+		entry = entry.hookErrorCode(args...)
 		entry.log(DebugLevel, fmt.Sprint(args...))
 	}
 }
