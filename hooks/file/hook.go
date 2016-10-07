@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/gogap/logrus"
-	"github.com/gogap/logrus/hooks/caller"
+	"github.com/hugcoday/logrus"
+	"github.com/hugcoday/logrus/hooks/caller"
 )
 
 func NewHook(file string) (f *FileHook) {
