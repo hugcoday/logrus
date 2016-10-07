@@ -79,7 +79,7 @@ func getMessage(entry *logrus.Entry) (message string, err error) {
 				file = fileName[1]
 			}
 		}
-		message = message + fmt.Sprintf("%s:%d", file, lineNumber)
+		message = message + fmt.Sprintf("    %s:%d", file, lineNumber)
 	}
 	return
 }
